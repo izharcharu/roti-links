@@ -59,26 +59,35 @@ var CONFIG={
   name:"โรตี บังอาร์เดล",
   bio:"สั่งโรตีได้ทุกช่องทาง กดเลือกร้านได้เลย",
   links:[
-    {icon:"🛒",logo:"shopee.png",title:"Shopee",desc:"สั่งโรตีบน Shopee",url:"https://s.shopee.co.th/5fqOIRzhic"},
-    {icon:"🎵",logo:"tiktok.png",title:"TikTok Shop",desc:"@myardel",url:"https://www.tiktok.com/@myardel"},
-    {icon:"💬",logo:"line.png",title:"LINE",desc:"แอดไลน์สั่งซื้อ",url:"https://line.me/ti/p/qls9hjqwaB"},
-    {icon:"📘",logo:"facebook.png",title:"Facebook",desc:"เพจร้านค้า",url:"https://www.facebook.com/share/1EBpoZCByH/"},
-    {icon:"📞",logo:"phone.png",title:"โทร 080-716-5786",desc:"โทรสั่งซื้อ / สอบถาม",url:"tel:0807165786"}
+    {icon:"🛒",logo:"shopee.png",title:"Shopee",url:"https://s.shopee.co.th/5fqOIRzhic"},
+    {icon:"🎵",logo:"tiktok.png",title:"TikTok Shop",url:"https://www.tiktok.com/@myardel"},
+    {icon:"💬",logo:"line.png",title:"LINE",url:"https://line.me/ti/p/qls9hjqwaB"},
+    {icon:"📘",logo:"facebook.png",title:"Facebook",url:"https://www.facebook.com/share/1EBpoZCByH/"},
+    {icon:"📞",logo:"phone.png",title:"โทร 080-716-5786",url:"tel:0807165786"}
   ]
 };
 document.getElementById("name").textContent=CONFIG.name;
 document.getElementById("bio").textContent=CONFIG.bio;
 document.title=CONFIG.name;
+function tryLogo(ic,l){
+  var base=l.logo.replace(/\.[^.]+$/,""),cap=base.charAt(0).toUpperCase()+base.slice(1),names=[l.logo],i=0;
+  ["png","PNG","jpg","jpeg","webp","svg"].forEach(function(e){names.push(base+"."+e);names.push(cap+"."+e)});
+  (function next(){
+    if(i>=names.length)return;
+    var im=new Image();im.alt=l.title;
+    im.onload=function(){ic.textContent="";ic.appendChild(im)};
+    im.onerror=next;im.src=names[i++];
+  })();
+}
 var box=document.getElementById("links");
 CONFIG.links.forEach(function(l){
   var a=document.createElement("a");
   a.className="link";a.href=l.url;a.target="_blank";a.rel="noopener";
-  a.innerHTML='<span class="ic"></span><span class="tx"><span class="t"></span><small></small></span><span class="ar">›</span>';
+  a.innerHTML='<span class="ic"></span><span class="tx"><span class="t"></span></span><span class="ar">›</span>';
   var ic=a.querySelector(".ic");
   ic.textContent=l.icon;
-  if(l.logo){var im=new Image();im.alt=l.title;im.onload=function(){ic.textContent="";ic.appendChild(im)};im.src=l.logo}
+  if(l.logo)tryLogo(ic,l);
   a.querySelector(".t").textContent=l.title;
-  a.querySelector("small").textContent=l.desc||"";
   box.appendChild(a);
 });
 </script>
